@@ -69,7 +69,7 @@ export default function Home() {
     >
       <Link
         href="/login"
-        className="absolute top-4 right-4 text-xs text-slate-400 hover:text-slate-600 transition-colors underline"
+        className="absolute top-4 right-4 text-2xl text-slate-400 hover:text-slate-600 transition-colors underline"
       >
         staff
       </Link>
