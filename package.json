@@ -1,7 +1,7 @@
 {
   "name": "nextjs-frontend",
   "version": "1.0.0",
-  "author": "byte5",,
+  "author": "byte5",
   "private": true,
   "scripts": {
     "dev": "next dev",

@@ -1,0 +1,14 @@
+# DO NOT ALTER THIS FILE #
+
+name: Fail PR Check
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  fail:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Always fail
+        run: exit 1
