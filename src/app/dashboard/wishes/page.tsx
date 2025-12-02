@@ -1,36 +1,49 @@
-'use client';
+"use client";
 
-import { useEffect, useState, DragEvent } from 'react';
-import { api } from '@/lib/api';
-import type { Wish, Status } from '@/types';
-import { Clock, CheckCircle, XCircle, Loader } from 'lucide-react';
-import WishCard from '@/components/WishCard';
-import WishDetailsModal from '@/components/WishDetailsModal';
+import { useEffect, useState, DragEvent } from "react";
+import { api } from "@/lib/api";
+import type { Wish, Status } from "@/types";
+import {
+  Clock,
+  CheckCircle,
+  XCircle,
+  Loader,
+  Check,
+  CheckCheckIcon,
+} from "lucide-react";
+import WishCard from "@/components/WishCard";
+import WishDetailsModal from "@/components/WishDetailsModal";
+import { title } from "process";
 
 const statusConfig = {
   pending: {
-    title: 'Pending',
+    title: "Pending",
     icon: Clock,
-    color: 'bg-amber-50 text-amber-900 border-amber-200',
+    color: "bg-amber-50 text-amber-900 border-amber-200",
   },
   in_progress: {
-    title: 'In Progress',
+    title: "In Progress",
     icon: Loader,
-    color: 'bg-blue-50 text-blue-900 border-blue-200',
+    color: "bg-blue-50 text-blue-900 border-blue-200",
+  },
+  paid: {
+    title: "Paid",
+    icon: CheckCircle,
+    color: "bg-purple-50 text-purple-900 border-purple-200",
   },
   granted: {
-    title: 'Granted',
+    title: "Granted",
     icon: CheckCircle,
-    color: 'bg-emerald-50 text-emerald-900 border-emerald-200',
+    color: "bg-emerald-50 text-emerald-900 border-emerald-200",
   },
   denied: {
-    title: 'Denied',
+    title: "Denied",
     icon: XCircle,
-    color: 'bg-slate-100 text-slate-900 border-slate-200',
+    color: "bg-slate-100 text-slate-900 border-slate-200",
   },
 };
 
-const PRIORITY_ORDER: Record<Wish['priority'], number> = {
+const PRIORITY_ORDER: Record<Wish["priority"], number> = {
   high: 0,
   medium: 1,
   low: 2,
@@ -49,15 +62,15 @@ export default function WishesPage() {
 
   const loadWishes = async () => {
     try {
-      console.log('Fetching wishes...');
+      console.log("Fetching wishes...");
       const data = await api.wishes.getAll();
-      console.log('Loaded wishes:', data);
-      console.log('Is array?', Array.isArray(data));
-      console.log('Type:', typeof data);
+      console.log("Loaded wishes:", data);
+      console.log("Is array?", Array.isArray(data));
+      console.log("Type:", typeof data);
       setWishes(Array.isArray(data) ? data : []);
     } catch (error: any) {
-      console.error('Failed to load wishes:', error);
-      console.error('Error details:', error.message, error.status);
+      console.error("Failed to load wishes:", error);
+      console.error("Error details:", error.message, error.status);
       setWishes([]);
     } finally {
       setLoading(false);
@@ -73,7 +86,7 @@ export default function WishesPage() {
         )
       );
     } catch (error) {
-      console.error('Failed to update wish status:', error);
+      console.error("Failed to update wish status:", error);
     }
   };
 
@@ -88,10 +101,9 @@ export default function WishesPage() {
   };
 
   const getWishesByStatus = (status: Status) =>
-    wishes.filter((wish) => wish.status === status)
-  .sort(
-      (a, b) => PRIORITY_ORDER[a.priority] - PRIORITY_ORDER[b.priority]
-    );
+    wishes
+      .filter((wish) => wish.status === status)
+      .sort((a, b) => PRIORITY_ORDER[a.priority] - PRIORITY_ORDER[b.priority]);
 
   const handleDragStart = (wish: Wish) => {
     setDraggedWish(wish);
@@ -127,7 +139,7 @@ export default function WishesPage() {
     try {
       await api.wishes.update(draggedWish.id, { status: newStatus });
     } catch (error) {
-      console.error('Failed to update wish status:', error);
+      console.error("Failed to update wish status:", error);
       // Revert on error
       setWishes((prev) =>
         prev.map((wish) => (wish.id === draggedWish.id ? draggedWish : wish))
@@ -155,12 +167,10 @@ export default function WishesPage() {
     <div>
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-slate-900 mb-2">Wishes</h1>
-        <p className="text-slate-600">
-          Manage and track all submitted wishes
-        </p>
+        <p className="text-slate-600">Manage and track all submitted wishes</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-5">
         {(Object.keys(statusConfig) as Status[]).map((status) => {
           const config = statusConfig[status];
           const statusWishes = getWishesByStatus(status);
@@ -171,7 +181,9 @@ export default function WishesPage() {
               <div className={`rounded-lg border p-4 mb-4 ${config.color}`}>
                 <div className="flex items-center gap-3">
                   <Icon className="w-5 h-5" />
-                  <h2 className="font-semibold text-sm uppercase tracking-wide">{config.title}</h2>
+                  <h2 className="font-semibold text-sm uppercase tracking-wide">
+                    {config.title}
+                  </h2>
                   <span className="ml-auto text-sm font-bold bg-white/60 px-2 py-0.5 rounded">
                     {statusWishes.length}
                   </span>
@@ -181,8 +193,8 @@ export default function WishesPage() {
               <div
                 className={`space-y-3 flex-1 min-h-[200px] rounded-lg transition-all ${
                   dragOverColumn === status
-                    ? 'bg-slate-100 border-2 border-dashed border-slate-400 p-2'
-                    : 'border-2 border-transparent'
+                    ? "bg-slate-100 border-2 border-dashed border-slate-400 p-2"
+                    : "border-2 border-transparent"
                 }`}
                 onDragOver={handleDragOver}
                 onDragEnter={() => handleDragEnter(status)}
