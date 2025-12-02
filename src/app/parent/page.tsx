@@ -34,7 +34,7 @@ export default function CreateParentPage() {
     }
   };
 
-  const shareLink = "http://localhost:3000/wish?id=123";
+  const shareLink = "http://localhost:3000?wish=123";
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center px-4">
