@@ -45,6 +45,7 @@ export default function WishesPage() {
       console.log("Is array?", Array.isArray(data));
       console.log("Type:", typeof data);
       setWishes(Array.isArray(data) ? data : []);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.error("Failed to load wishes:", error);
       console.error("Error details:", error.message, error.status);
